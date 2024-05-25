@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: java-prometheus-scaledobject
+  namespace: java-prometheus
+spec:
+  scaleTargetRef:
+    name: keda-java-prometheus  # nome do deployment onde esta o container 
+                              # a ser executado pela trigger
+  minReplicaCount: 1  # número mínimo de réplicas que deverão ficar no ar
+  maxReplicaCount: 10 # número máximo de réplicas que deverão ficar no ar
+  pollingInterval: 5  # intervalo entre um check e outro no Rabbit
+  cooldownPeriod: 30  # tempo em segundos que os pods ficarão no ar 
+                      # depois que a checagem retornar 0 msg na fila
+  triggers:
+  - type: cpu
+    metricType: Utilization # Allowed types are 'Utilization' or 'AverageValue'
+    metadata:
+      value: "50"

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keda-java-prometheus
+  namespace: java-prometheus
+  labels:
+    app: keda-java-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: keda-java-prometheus
+  template:
+    metadata:
+      labels:
+        app: keda-java-prometheus
+    spec:
+      containers:
+      - name: service
+        image: lscheiner/scheiner-prometheus:v1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /actuator
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3               
+        ports:
+        - containerPort: 8080       
+
