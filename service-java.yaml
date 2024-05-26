@@ -3,13 +3,17 @@ kind: Service
 metadata:
   name: java-prometheus-service
   namespace: java-prometheus
-  
+  annotations:
+    prometheus.io/scheme= http
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
 spec:
   selector:
     app: keda-java-prometheus
   ports:
-    - protocol: TCP
-      port: 9090
+    - name: http
+      port: 8080
       targetPort: 8080
   type: ClusterIP
 
