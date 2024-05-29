@@ -21,4 +21,5 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoggerInterceptor());
 
     }
+
 }
