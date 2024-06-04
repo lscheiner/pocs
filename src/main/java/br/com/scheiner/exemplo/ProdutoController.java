@@ -67,17 +67,17 @@ public class ProdutoController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Object> deleteProduto2(@PathVariable Long id , @RequestBody Produto produtoDetails) {
-//        return produtos.stream()
-//                .filter(produto -> produto.getId().equals(id))
-//                .findFirst()
-//                .map(produto -> {
-//                    produtos.remove(produto);
-//                    return ResponseEntity.noContent().build();
-//                })
-//                .orElse(ResponseEntity.notFound().build());
-//    }
+    @DeleteMapping("/body/{id}")
+    public ResponseEntity<Object> deleteProduto2(@PathVariable Long id , @RequestBody Produto produtoDetails) {
+        return produtos.stream()
+                .filter(produto -> produto.getId().equals(id))
+                .findFirst()
+                .map(produto -> {
+                    produtos.remove(produto);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Produto> partiallyUpdateProduto(@PathVariable Long id, @RequestBody Produto produtoDetails) {
