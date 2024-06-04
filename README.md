@@ -32,3 +32,16 @@ http://localhost:9393/
 query exemplo:
 
 rate(http_server_requests_seconds_count{application="java-prometheus-service"}[2m])
+
+
+
+RequestResponseBodyMethodProcessor
+HandlerMethodArgumentResolverComposite -- linha 117
+InvocableHandlerMethod  -  linha 207
+RequestResponseBodyMethodProcessor -- linha 159
+readWithMessageConverters -- linha 186
+
+curl -X 'POST' \
+  'http://localhost:8080/produtos' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json'
