@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 //Eles são invocados apenas quando há um corpo de requisição a ser processado, o que ocorre com métodos HTTP como POST, PUT, PATCH
-@RestControllerAdvice
+//@RestControllerAdvice
 public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
 
     private final List<String> allowedUrls = Arrays.asList("/mensagem/**", "/produtos/**");

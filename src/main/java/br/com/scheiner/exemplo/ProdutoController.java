@@ -3,7 +3,12 @@ package br.com.scheiner.exemplo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +30,21 @@ public class ProdutoController {
     public List<Produto> getAllProdutos() {
         return produtos;
     }
+    
+    @GetMapping("erro")
+    public List<Produto> getAllProdutosErro() {
+        
+    	if (produtos.isEmpty()) {
+    		throw new RuntimeException("vazio");
+    	}
+    	
+    	return produtos;
+    }
+    
+    @GetMapping("map")
+    public Map<Long,Produto> getAllProdutosMap() {
+    	return produtos.stream().collect(Collectors.toMap(Produto::getId, Function.identity()));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getProdutoById(@PathVariable Long id) {
@@ -40,6 +60,21 @@ public class ProdutoController {
         produto.setId((long) (produtos.size() + 1));
         produtos.add(produto);
         return produto;
+    }
+    
+    @PostMapping("list")
+    public ResponseEntity<List<Produto>> createProdutoList(@RequestBody List<Produto> produto) {
+    	
+    	for(Produto produto1 : produto) {
+            produto1.setId((long) (produtos.size() + 1));
+            produtos.add(produto1);
+    	}
+    	
+    	HttpHeaders headers = new HttpHeaders();
+    	headers.add("1", "uno");
+    	
+        return new ResponseEntity<>(produtos ,headers, HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}")
