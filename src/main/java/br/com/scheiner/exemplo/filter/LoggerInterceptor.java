@@ -54,14 +54,15 @@ public class LoggerInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		if (handler instanceof HandlerMethod handlerMethod
-				&& response instanceof ContentCachingResponseWrapper contentCachingResponseWrapper) {
-			
-			Type returnType = handlerMethod.getMethod().getGenericParameterTypes()[0];
+				&& response instanceof ContentCachingResponseWrapper contentCachingResponseWrapper
+				&& handlerMethod.getMethod().getGenericParameterTypes().length > 0) {
+				
+				Type returnType = handlerMethod.getMethod().getGenericParameterTypes()[0];
 
-			Object obj  = getObject(returnType, contentCachingResponseWrapper.getContentAsByteArray());
-			
-			if (Objects.nonNull(obj))
-				System.out.println("response [" + mapper.writeValueAsString(obj) + "]");
+				Object obj  = getObject(returnType, contentCachingResponseWrapper.getContentAsByteArray());
+				
+				if (Objects.nonNull(obj))
+					System.out.println("response [" + mapper.writeValueAsString(obj) + "]");
 			
 		}
 
