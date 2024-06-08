@@ -17,11 +17,11 @@ public class CustomExceptionHandler  {
 
 	
    @ExceptionHandler(value = RuntimeException.class)
-    protected ResponseEntity<Object> runtimeException( RuntimeException ex, HttpStatus status, WebRequest request) {
+    public ResponseEntity<ApiErrorMessage> runtimeException( RuntimeException ex, WebRequest request ) {
 
         List<String> errors = Arrays.asList(ex.getMessage());
 
-        ApiErrorMessage apiErrorMessage = new ApiErrorMessage(status, errors);
+        ApiErrorMessage apiErrorMessage = new ApiErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, errors);
 
         return new ResponseEntity<>(apiErrorMessage, apiErrorMessage.getStatus());
     }

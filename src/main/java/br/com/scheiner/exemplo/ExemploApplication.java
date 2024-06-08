@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import io.micrometer.core.instrument.MeterRegistry;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackageClasses = ExemploApplication.class)
 public class ExemploApplication {
 
 	public static void main(String[] args) {
