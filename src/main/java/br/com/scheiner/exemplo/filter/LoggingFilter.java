@@ -25,7 +25,7 @@ public class LoggingFilter implements Filter {
 	   HttpServletRequest request = (HttpServletRequest) req;
 	   CachedHttpServletRequestWrapper wrappedRequest = new CachedHttpServletRequestWrapper(request);
 	   chain.doFilter(wrappedRequest, responseCacheWrapperObject);
-
+	   responseCacheWrapperObject.copyBodyToResponse();
 	}
 
 }

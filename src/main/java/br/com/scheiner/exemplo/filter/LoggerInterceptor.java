@@ -67,7 +67,6 @@ public class LoggerInterceptor implements HandlerInterceptor {
 					System.out.println("response [" + mapper.writeValueAsString(obj) + "]");
 
 			}
-			contentCachingResponseWrapper.copyBodyToResponse();
 		}
 	}
 	
