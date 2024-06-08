@@ -32,7 +32,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
 				
 				if (methodParameter.hasParameterAnnotation(RequestBody.class)) {
 					
-					Type returnType = handlerMethod.getMethod().getGenericParameterTypes()[0];
+					Type returnType = methodParameter.getGenericParameterType();
 
 					if (request instanceof CachedHttpServletRequestWrapper requestWrapper) {
 						
@@ -49,43 +49,60 @@ public class LoggerInterceptor implements HandlerInterceptor {
 		return true;
 	}
 
+	
+	//ResourceHttpRequestHandler
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 
-		if (handler instanceof HandlerMethod handlerMethod
-				&& response instanceof ContentCachingResponseWrapper contentCachingResponseWrapper
-				&& handlerMethod.getMethod().getGenericParameterTypes().length > 0) {
-				
-				Type returnType = handlerMethod.getMethod().getGenericParameterTypes()[0];
+		if (response instanceof ContentCachingResponseWrapper contentCachingResponseWrapper) {
 
-				Object obj  = getObject(returnType, contentCachingResponseWrapper.getContentAsByteArray());
-				
+			if (handler instanceof HandlerMethod handlerMethod) {
+
+				Type returnType = handlerMethod.getMethod().getGenericReturnType();
+
+				Object obj = getObject(returnType, contentCachingResponseWrapper.getContentAsByteArray());
+
 				if (Objects.nonNull(obj))
 					System.out.println("response [" + mapper.writeValueAsString(obj) + "]");
-			
-		}
 
+			}
+			contentCachingResponseWrapper.copyBodyToResponse();
+		}
 	}
 	
 	
 	private Object getObject(Type type, byte[] json) {
+	    try {
+	        
+	    	type = extractParameterizedType(type);
+	        
+	        if (isByteArray(type)) {
+	            return null;
+	        }
+	        
+	        JavaType javaType = mapper.getTypeFactory().constructType(type);
+	        return mapper.readValue(json, javaType);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 
-		try {
-			if (type instanceof ParameterizedType parameterizedType
-					&& ((ParameterizedType) type).getRawType().getTypeName().equals(ResponseEntity.class.getName())) {
-				Type[] typeArguments = parameterizedType.getActualTypeArguments();
-				if (typeArguments.length > 0) {
-					type = typeArguments[0];
-				}
-			}
+	private Type extractParameterizedType(Type type) {
+	    if (type instanceof ParameterizedType parameterizedType &&
+	        parameterizedType.getRawType().getTypeName().equals(ResponseEntity.class.getName())) {
+	        
+	        Type[] typeArguments = parameterizedType.getActualTypeArguments();
+	        if (typeArguments.length > 0) {
+	            return typeArguments[0];
+	        }
+	    }
+	    return type;
+	}
 
-			JavaType javaType = mapper.getTypeFactory().constructType(type);
-			return mapper.readValue(json, javaType);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	private boolean isByteArray(Type type) {
+	    return type instanceof Class<?> c && c.isArray() && c.getComponentType() == byte.class;
 	}
 
 
