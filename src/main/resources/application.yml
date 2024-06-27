@@ -1,0 +1,4 @@
+configuracao:
+  lista:
+    - nome: "Subconfiguração 1"
+    - nome: "Subconfiguração 2"
