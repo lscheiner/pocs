@@ -1,4 +1,5 @@
 configuracao:
+  nome: "teste"
   lista:
     - nome: "Subconfiguração 1"
     - nome: "Subconfiguração 2"

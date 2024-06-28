@@ -13,7 +13,7 @@ public class ConfiguracaoFactory {
     }
 
     public Configuracao createConfiguracao() {
-        return configuracaoProvider.getObject("tes");
+        return configuracaoProvider.getObject();
     }
 	
 }

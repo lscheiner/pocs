@@ -11,11 +11,6 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ConfigurationProperties(prefix = "configuracao")
 public class Configuracao {
-	
-	public Configuracao(String nome) {
-		super();
-		this.nome = nome;
-	}
 
 	private String nome;
 	
