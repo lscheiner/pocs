@@ -1,9 +1,11 @@
 package br.com.scheiner.exemplo;
 
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.scheiner.exemplo.feign.Client;
+import feign.RetryableException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/produtos")
@@ -39,8 +43,38 @@ public class ProdutoController {
     
     @GetMapping("openfeign")
     public  Object getAllProdutoOpenfeign() {
-        
-    	return client.getJsonAsMap();
+    	 var p = new Produto();
+    	
+    	FunctionUtils.handleProcess(
+    			this::createProduto,
+    			null,
+                c -> {
+                	
+                	if (Objects.isNull(c)) {
+                		System.out.println("é null");
+                	}
+                	
+                	createProduto(new Produto());
+                	}
+            );
+    	
+    	
+    	try {
+    		
+        	return client.getJsonAsMap();
+
+    	}
+    	catch (RetryableException e) {
+
+    		if (e.getCause() instanceof SocketTimeoutException) {
+        		// invocar um metodo
+
+    		}
+    	
+    	}
+    	
+    	return null;
+    	
     }
     
     @GetMapping("erro")
@@ -146,5 +180,16 @@ public class ProdutoController {
     @PatchMapping("/teste/{id}")
     public ResponseEntity<Produto> partiallyUpdateProduto(@PathVariable Long id) {
         return ResponseEntity.ok().build();
+    }
+    
+    
+    @GetMapping("timeout")
+    public ResponseEntity<String> getTimeout(HttpServletRequest request) throws InterruptedException {
+    	
+    	Thread.sleep(15000L);
+    	
+    	System.out.println("terminou");
+    	
+        return ResponseEntity.ok("ok");
     }
 }
