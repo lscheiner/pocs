@@ -1,6 +1,7 @@
 package br.com.scheiner.exemplo;
 
 
+import java.math.BigDecimal;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;

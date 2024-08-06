@@ -1,9 +1,12 @@
 package br.com.scheiner.exemplo;
 
+import java.math.BigDecimal;
+
 public class Produto {
 	private Long id;
 	private String nome;
 	private double preco;
+	private BigDecimal valor;
 
 	public Long getId() {
 		return id;
@@ -28,5 +31,15 @@ public class Produto {
 	public void setPreco(double preco) {
 		this.preco = preco;
 	}
+
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
+	
+	
 
 }

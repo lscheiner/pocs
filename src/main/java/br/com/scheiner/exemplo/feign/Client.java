@@ -8,5 +8,8 @@ public interface Client {
 
     @GetMapping("/produtos")
     Object getJsonAsMap();
+    
+    @GetMapping("/produtos")
+    Object getProdutos();
 	
 }

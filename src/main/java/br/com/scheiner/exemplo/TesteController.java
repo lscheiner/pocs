@@ -63,6 +63,9 @@ public class TesteController {
 		
 		System.out.println(t2);
 		System.out.println(t1);
+		
+		System.out.println(t2);
+		System.out.println(t1);
 
 		
 		System.out.println(System.identityHashCode(configuracaoFactory.createConfiguracao()));
